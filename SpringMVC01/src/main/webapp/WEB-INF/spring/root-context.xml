@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+		<!-- API(HikariCP) -->
+		<!-- bean: 객체를 생성하는 태그 = new 객체()-->
+		<bean id="hikariconfig" class="com.zaxxer.hikari.HikariConfig">
+			<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+			<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/mvc01?serverTimezone=UTC"/>
+			<property name="username" value="root"/>
+			<property name="password" value="01234567"/>
+		</bean>
+		<!-- Hikari -->
+		<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+			<constructor-arg ref="hikariconfig"/>
+		</bean>
+		<!-- Mapper interface들을 메모리에 올리는 방법(scan) -->
+		<mybatis-spring:scan base-package="kr.board.mapper" />
+		<!-- BoardMapper interface 구현클래스 생성 SqlSessionFactory(SQL을 실행하는 API) -->
+		<bean class="org.mybatis.spring.SqlSessionFactoryBean">
+			<property name="dataSource" ref="dataSource"/>
+		</bean>
+		
+</beans>
